@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">福州圈</string>
+    <string name="action_settings">设置</string>
+    <string name="str_ok">好的</string>
+    <string name="str_desc_return">返回</string>
+    <string name="str_desc_about">关于</string>
+    <string name="str_shop_list_title">商户列表</string>
+    <string name="str_product_list_title">产品列表</string>
+    <string name="str_btn_add_shop">添加</string>
+    <string name="str_btn_buy">购买</string>
+    <string name="str_add_shop_title">添加商家</string>
+    <string name="str_hints_add">输入四位商家代码</string>
+    <string name="str_hints_phone_number">请输入手机号码</string>
+    <string name="str_hints_order_success">您的订单已提交！</string>
+    <string name="str_hints_order_fail">很抱歉，您的订单提交失败！</string>
+    <string name="str_hints_no_shop">您的商户列表为空，请添加一个吧..</string>
+    <string name="str_image_about">关于福州圈</string>
+    <string name="str_image_shop_introduction">商家介绍</string>
+    <string name="str_error_no_exist_shop">您所订阅的商家不存在，请重新输入！</string>
+    <string name="str_error_shop_has_added">该商家您已经订阅！</string>
+    <string name="str_error_no_network">网络没有连接，请您连接网络先！</string>
+    <string name="str_warning_invalid_phone_num">您输入的电话号码格式有误，请亲重新输入哦！</string>
+    <string name="str_warning_order_empty">您还没有添加商品，请添加商品后再提交订单哦！</string>
+
+</resources>

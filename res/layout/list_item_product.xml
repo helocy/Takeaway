@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal" >
+
+    <RelativeLayout 
+        android:layout_width="120sp"
+        android:layout_height="120sp">
+	    <ImageView 
+	            android:id="@+id/id_image_order_add"
+	            android:layout_width="fill_parent"
+	            android:layout_height="fill_parent"
+	            android:src="@drawable/order_add"
+	            android:contentDescription="@string/str_image_order_add"/>
+	    
+	    <ImageView 
+	        android:id="@+id/id_image_order_cancel"
+	        android:layout_width="50sp"
+	        android:layout_height="50sp"
+	        android:contentDescription="@string/str_image_order_add"
+	        android:layout_alignParentRight="true"
+	        android:layout_alignParentEnd="true"
+	        android:layout_alignParentBottom="true"/>
+	    
+	    <TextView 
+	        android:id="@+id/id_text_order_num"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentRight="true"
+	        android:layout_alignParentEnd="true"
+	        android:layout_alignParentTop="true"
+	        android:layout_marginTop="2sp"
+	        android:layout_marginRight="16sp"
+	        android:layout_marginEnd="16sp"
+	        android:textSize="42sp"
+	        android:textColor="@color/number"/>
+    </RelativeLayout>
+    
+    <ImageView 
+        android:id="@+id/id_image_product"
+        android:layout_width="312sp"
+        android:layout_height="120sp"
+        android:scaleType="centerCrop"
+        android:contentDescription="@string/str_image_product"/>
+
+</LinearLayout>

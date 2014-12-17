@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+    <color android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/id_color_bg" name="background">#FF99CCCC</color>
+    <color android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/id_color_num" name="number">#FFAAAAAA</color>
+    <color android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/id_color_phone_bg" name="phone">#FFBBBBBB</color>
+    <color android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/id_color_list_bg" name="list">#FFEEEEEE</color>
+</resources>

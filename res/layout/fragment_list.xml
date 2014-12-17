@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+    
+    <include layout="@layout/title_bar"
+        android:id="@+id/id_list_title_bar"/>
+    
+    <ListView 
+        android:id="@+id/id_list_view"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:divider="@null"
+        android:layout_below="@id/id_list_title_bar">
+    </ListView>
+    
+    <TextView 
+        android:id="@+id/id_text_no_shop"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:textSize="28sp"
+        android:gravity="center"
+        android:visibility="invisible"
+        android:layout_below="@id/id_list_title_bar"/>
+    
+    <LinearLayout 
+        android:id="@+id/id_view_bottom_container"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true">
+    </LinearLayout>
+</RelativeLayout>

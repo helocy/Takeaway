@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+    
+	<include layout="@layout/title_bar"/>
+	
+	<RelativeLayout
+	    android:layout_width="fill_parent"
+	    android:layout_height="match_parent">
+	    
+	    <TextView 
+		    android:id="@+id/id_text_add_hints"
+		    android:layout_width="wrap_content"
+		    android:layout_height="50sp"
+		    android:text="@string/str_hints_add"
+		    android:textSize="24sp"
+		    android:layout_marginTop="80sp"
+		    android:layout_centerHorizontal="true"/>
+	    
+	    <EditText 
+	        android:id="@+id/id_edit_shop_code"
+	        android:layout_width="180sp"
+	        android:layout_height="wrap_content"
+	        android:inputType="number"
+	        android:layout_below="@id/id_text_add_hints"
+	        android:layout_centerHorizontal="true"
+	        android:textSize="36sp"
+	        android:gravity="center"/>
+	    
+	    <ProgressBar 
+	        android:id="@+id/id_loading_add_shop"
+	        style="@android:style/Widget.ProgressBar.Inverse"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_marginTop="36sp"
+	        android:layout_centerHorizontal="true"
+	        android:layout_below="@id/id_edit_shop_code"/>
+	</RelativeLayout>
+</LinearLayout>
