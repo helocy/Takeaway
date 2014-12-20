@@ -91,8 +91,7 @@ public class ProductListAdapter extends BaseAdapter implements Runnable, OnClick
 		
 		if (convertView == null) {
 			viewHolder = new ViewHolder();
-			LayoutInflater mInflater = LayoutInflater.from(mContext);
-			convertView = mInflater.inflate(R.layout.list_item_product, null);
+			convertView = new ProductListItemView(mContext, null);
 			
 			viewHolder.mProductImage = (ImageView) convertView.findViewById(R.id.id_image_product);
 			viewHolder.mAddBtn = (ImageView) convertView.findViewById(R.id.id_image_order_add);

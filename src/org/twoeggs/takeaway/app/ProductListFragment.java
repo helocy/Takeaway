@@ -18,6 +18,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -31,6 +32,7 @@ public class ProductListFragment extends ListFragment implements RequestListener
 	private WebService mWebService;
 	private User mUser;
 	
+	private LinearLayout mBuyLayout;
 	private EditText mPhoneNumEdit;
 	private Button mBuyBtn;
 
@@ -82,13 +84,31 @@ public class ProductListFragment extends ListFragment implements RequestListener
 	}
 	
 	private void initView() {
+		LayoutParams layoutParams = null;
+		
 		LayoutInflater inflater = LayoutInflater.from(getActivity());
 		LinearLayout container = (LinearLayout) getView().findViewById(R.id.id_view_bottom_container);
 		container.addView(inflater.inflate(R.layout.bottom_add_order, null));
 		
+		mBuyLayout = (LinearLayout) container.findViewById(R.id.id_layout_buy);
 		mBuyBtn = (Button) container.findViewById(R.id.id_btn_buy);
 		mPhoneNumEdit = (EditText) container.findViewById(R.id.id_edit_phone_num);
 		mBuyBtn.setTag(this);
+		
+		layoutParams = mBuyLayout.getLayoutParams();
+		layoutParams.height = getResources().getDisplayMetrics().heightPixels / 10;
+		mBuyLayout.setLayoutParams(layoutParams);
+		
+		layoutParams = mPhoneNumEdit.getLayoutParams();
+		layoutParams.width = getResources().getDisplayMetrics().widthPixels / 2;
+		layoutParams.height = getResources().getDisplayMetrics().heightPixels / 10 - 30;
+		mPhoneNumEdit.setLayoutParams(layoutParams);
+		
+		layoutParams = mBuyBtn.getLayoutParams();
+		layoutParams.width = getResources().getDisplayMetrics().widthPixels / 4;
+		layoutParams.height = getResources().getDisplayMetrics().heightPixels / 10 - 10;
+		mBuyBtn.setLayoutParams(layoutParams);
+
 		mBuyBtn.setOnClickListener(new View.OnClickListener() {
 			
 			@Override

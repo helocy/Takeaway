@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<org.twoeggs.takeaway.app.ShopListItemView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/list"
-    android:orientation="vertical" >
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
     <ImageView 
         android:id="@+id/id_image_shop_logo"
-        android:layout_width="fill_parent"
-        android:layout_height="150sp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:scaleType="fitCenter"
+        android:background="@color/list"
         android:contentDescription="@string/str_image_shop_logo"/>
-</org.twoeggs.takeaway.app.ShopListItemView>
+</merge>

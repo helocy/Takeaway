@@ -8,6 +8,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -59,6 +60,10 @@ public class ShopListFragment extends ListFragment {
 		container.addView(inflater.inflate(R.layout.bottom_add_shop, null));
 		mAddBtn = (Button) getView().findViewById(R.id.id_btn_add_shop);
 		mNoShopText = (TextView) getView().findViewById(R.id.id_text_no_shop);
+		
+		LayoutParams layoutParams = mAddBtn.getLayoutParams();
+		layoutParams.height = getResources().getDisplayMetrics().heightPixels / 10;
+		mAddBtn.setLayoutParams(layoutParams);
 		
 		mAddBtn.setOnClickListener(new View.OnClickListener() {
 			

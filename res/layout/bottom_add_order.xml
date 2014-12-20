@@ -1,19 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/phone"
-    android:gravity="center" >
+    android:id="@+id/id_layout_buy"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
     
     <EditText 
         android:id="@+id/id_edit_phone_num"
-        android:layout_width="240sp"
-        android:layout_height="48sp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:textSize="24sp"
         android:inputType="phone"
         android:hint="@string/str_hints_phone_number"
         android:background="@android:color/white"
-        android:gravity="center"/>
+        android:gravity="center"
+        android:layout_marginLeft="20sp"
+        android:layout_marginStart="20sp"/>
     
     <Button 
         android:id="@+id/id_btn_buy"
@@ -21,6 +25,7 @@
         android:layout_height="60sp"
         android:text="@string/str_btn_buy"
         android:textColor="@android:color/white"
-        android:layout_marginLeft="20sp"/>
+        android:layout_marginLeft="40sp"
+        android:layout_marginStart="40sp"/>
 
 </LinearLayout>

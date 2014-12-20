@@ -73,8 +73,8 @@ public class ShopListAdapter extends BaseAdapter implements Runnable {
 		
 		if (convertView == null) {
 			viewHolder = new ViewHolder();
-            LayoutInflater mInflater = LayoutInflater.from(mContext);
-            convertView = mInflater.inflate(R.layout.list_item_shop, null);
+			
+			convertView = new ShopListItemView(mContext, null);
             
             viewHolder.mShopLogoView = (ImageView) convertView.findViewById(R.id.id_image_shop_logo);
 
