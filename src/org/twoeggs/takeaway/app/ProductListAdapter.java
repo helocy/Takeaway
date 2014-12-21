@@ -13,9 +13,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
-import android.view.MotionEvent.PointerCoords;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -33,10 +30,11 @@ public class ProductListAdapter extends BaseAdapter implements Runnable, OnClick
 	private Shop mShop;
 	private boolean mBreaker = false;
 	
-	public ProductListAdapter(Context context) {
+	public ProductListAdapter(Context context, Shop shop) {
 		super();
 		
 		mContext = context;
+		mShop = shop;
 		
 		mHandler = new Handler(Looper.getMainLooper()){
 			@Override
@@ -131,13 +129,13 @@ public class ProductListAdapter extends BaseAdapter implements Runnable, OnClick
 		int mOrderNumber = 0;
 		int mPosition;
     }
-
-	public void setShop(Shop shop) {
-		mShop = shop;
-	}
 	
 	public Shop getShop() {
 		return mShop;
+	}
+	
+	public void setShop(Shop shop) {
+		mShop = shop;
 	}
 	
 	public void setSwitcher(SwitchFragment switcher) {
@@ -153,16 +151,6 @@ public class ProductListAdapter extends BaseAdapter implements Runnable, OnClick
 		while (true) {
 			if (mBreaker)
 				break;
-			
-			if (mShop == null) {
-				try {
-					Thread.sleep(3000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				continue;
-			}
 			
 			ArrayList<Product> products = mShop.getProducts();
 			if (products == null)
@@ -221,7 +209,7 @@ public class ProductListAdapter extends BaseAdapter implements Runnable, OnClick
 		case R.id.id_image_product:
 			// Show product image
 			product = (Product)getItem(viewHolder.mPosition);
-			mSwitcher.switchFragment(FragmentIdentity.FRAGMENT_ABOUT, product.getIntroductionUrl());
+			mSwitcher.switchFragment(FragmentIdentity.FRAGMENT_ABOUT, mShop, product.getIntroductionUrl());
 			break;
 		}
 	}

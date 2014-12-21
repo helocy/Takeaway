@@ -7,6 +7,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 import org.twoeggs.takeaway.classes.Product;
+import org.twoeggs.takeaway.classes.Shop;
 
 import android.util.Log;
 
@@ -14,22 +15,19 @@ public class ProductListRequest extends Request {
 	public static final String TAG = "ProductListRequest";
 	public static final String URL = "http://218.244.141.142/takeaway/ApiProduct/listProduct";
 	
-	private ArrayList<Product> mProducts;
+	private Shop mShop;
 
-	public ProductListRequest(RequestListener listener, int code) {
+	public ProductListRequest(RequestListener listener, Shop shop) {
 		super(TAG, listener, URL);
-		addParamPair("code", String.valueOf(code));
-	}
-	
-	public ArrayList<Product> getProductList() {
-		return mProducts;
+		addParamPair("code", String.valueOf(shop.getCode()));
+		mShop = shop;
 	}
 
 	@Override
 	public void resultProcess(RequestResult result) {
 		result.print(TAG);
 		
-		mProducts = new ArrayList<Product>();
+		ArrayList<Product> products = new ArrayList<Product>();
 		
 		JSONTokener jsonParser = new JSONTokener(result.getData());
 		
@@ -49,13 +47,14 @@ public class ProductListRequest extends Request {
 				product.setLogoUrl(obj.getString("slogo"));
 				product.setIntroductionUrl(obj.getString("blogo"));
 				
-				mProducts.add(product);
+				products.add(product);
 			}
 		} catch (JSONException e) {
 			Log.e(TAG, "Cannot parse product list json");
 			e.printStackTrace();
 		}
 		
+		mShop.setProducts(products);
 	}
 
 }

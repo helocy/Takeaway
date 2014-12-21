@@ -2,19 +2,24 @@ package org.twoeggs.takeaway.classes;
 
 import java.util.ArrayList;
 
+import org.twoeggs.takeaway.app.ProductListAdapter;
 import org.twoeggs.takeaway.database.Database;
 import org.twoeggs.takeaway.database.DatabaseHelper;
+import org.twoeggs.takeaway.server.ProductListRequest;
+import org.twoeggs.takeaway.server.Request;
+import org.twoeggs.takeaway.server.RequestListener;
+import org.twoeggs.takeaway.server.WebService;
 
 import android.util.Log;
 
-public class ShopManager {
+public class ShopManager implements RequestListener {
 	public static final String TAG = "ShopManager";
 	
 	private ArrayList<Shop> mShops;
-	private Shop mActiveShop;
 	private Database mDatabase;
+	private WebService mWebService;
 	
-	public ShopManager(Database db) {
+	public ShopManager(Database db, WebService service) {
 		ArrayList<Shop> shops = DatabaseHelper.queryAllShops(db);
 		
 		if (shops == null)
@@ -23,6 +28,7 @@ public class ShopManager {
 			mShops = shops;
 		
 		mDatabase = db;
+		mWebService = service;
 	}
 	
 	public boolean addShop(Shop shop) {
@@ -71,33 +77,22 @@ public class ShopManager {
 		return mShops.size();
 	}
 	
-	public boolean setActiveShop(Shop shop) {
-		Shop search = getShop(shop.getName());
-		if (search == null) {
-			Log.e(TAG, "Cannot set a invalid active shop");
+	public boolean loadShop(Shop shop) {
+		if (mShops.contains(shop) == false) {
+			Log.e(TAG, "Try to load a invalid shop");
 			return false;
 		}
 		
-		mActiveShop = search;
+
+		// Load all products before product list show
+		if (shop.getProducts() == null)
+			mWebService.requestProductList(this, shop);
 		return true;
 	}
-	
-	public boolean setActiveShop(int index) {
-		Shop search = getShopByIndex(index);
-		if (search == null) {
-			Log.e(TAG, "Cannot set a invalid active shop, out of index");
-			return false;
+
+	@Override
+	public void onRequestComplete(Request request) {
+		if (request instanceof ProductListRequest) {
 		}
-		
-		mActiveShop = search;
-		return true;
-	}
-	
-	public Shop getActiveShop() {
-		return mActiveShop;
-	}
-	
-	public void clearActive() {
-		mActiveShop = null;
 	}
 }

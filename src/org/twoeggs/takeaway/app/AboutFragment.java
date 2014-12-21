@@ -2,7 +2,6 @@ package org.twoeggs.takeaway.app;
 
 import org.twoeggs.takeaway.R;
 import org.twoeggs.takeaway.classes.Shop;
-import org.twoeggs.takeaway.classes.ShopManager;
 import org.twoeggs.takeaway.utils.ImageLoader;
 
 import android.app.Activity;
@@ -22,13 +21,15 @@ public class AboutFragment extends Fragment implements Runnable {
 	
 	private ImageView mAboutImage;
 	
+	private Shop mShop;
 	private String mImageUrl;
 	private Bitmap mImage;
 	private SwitchFragment mSwitcher;
 	private Handler mHandler;
 	
-	public AboutFragment(String imageUrl) {
+	public AboutFragment(Shop shop, String imageUrl) {
 		super();
+		mShop = shop;
 		mImageUrl = imageUrl;
 		
 		mHandler = new Handler(Looper.getMainLooper()) {
@@ -89,16 +90,17 @@ public class AboutFragment extends Fragment implements Runnable {
 				if (mImageUrl == null)
 					getActivity().getFragmentManager().popBackStack();
 				else {
-					mSwitcher.switchFragment(FragmentIdentity.FRAGMENT_PRODUCT_LIST, null);
+					mSwitcher.switchFragment(FragmentIdentity.FRAGMENT_PRODUCT_LIST, mShop, null);
 				}
 			}
 		});
 	}
 	
-	public void update(String imageUrl) {
+	public void update(Shop shop, String imageUrl) {
 		if (imageUrl != null && imageUrl.equals(mImageUrl))
 			return;
 
+		mShop = shop;
 		mImageUrl = imageUrl;
 		mImage = null;
 	}

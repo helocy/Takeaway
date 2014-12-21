@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import org.twoeggs.takeaway.R;
 import org.twoeggs.takeaway.classes.Order;
 import org.twoeggs.takeaway.classes.Product;
-import org.twoeggs.takeaway.classes.ShopManager;
+import org.twoeggs.takeaway.classes.Shop;
 import org.twoeggs.takeaway.classes.User;
 import org.twoeggs.takeaway.server.CommitOrderRequest;
 import org.twoeggs.takeaway.server.ProductListRequest;
@@ -28,7 +28,7 @@ import android.widget.Toast;
 public class ProductListFragment extends ListFragment implements RequestListener {
 	public static final String TAG = "ProductListFragment";
 	
-	private ShopManager mShopManager;
+	private Shop mShop;
 	private WebService mWebService;
 	private User mUser;
 	
@@ -36,9 +36,9 @@ public class ProductListFragment extends ListFragment implements RequestListener
 	private EditText mPhoneNumEdit;
 	private Button mBuyBtn;
 
-	public ProductListFragment(ShopManager manager, WebService service, User user) {
+	public ProductListFragment(Shop shop, WebService service, User user) {
 		super(true);
-		mShopManager = manager;
+		mShop = shop;
 		mWebService = service;
 		mUser = user;
 	}
@@ -47,15 +47,10 @@ public class ProductListFragment extends ListFragment implements RequestListener
 	public void onResume() {
 		super.onResume();
 		
-		setTitle(mShopManager.getActiveShop().getName());
+		setTitle(mShop.getName());
 		
 		ProductListAdapter adapter = (ProductListAdapter) getAdapter();
-		adapter.setShop(mShopManager.getActiveShop());
 		adapter.setSwitcher(getSwitcher());
-		
-		if (mShopManager.getActiveShop().getProducts() == null) {
-			mWebService.requestProductList(this, mShopManager.getActiveShop().getCode());
-		}
 		
 		mPhoneNumEdit.setText("");
 	}
@@ -68,7 +63,7 @@ public class ProductListFragment extends ListFragment implements RequestListener
 	}
 	
 	private boolean checkOrder() {
-		ArrayList<Product> products = mShopManager.getActiveShop().getProducts();
+		ArrayList<Product> products = mShop.getProducts();
 		int total = 0;
 		
 		for (Product product : products) {
@@ -132,7 +127,7 @@ public class ProductListFragment extends ListFragment implements RequestListener
 				
 				// Create order
 				mUser.setPhoneNum(phoneNum);
-				Order order = new Order(mUser, mShopManager.getActiveShop().getProducts());
+				Order order = new Order(mUser, mShop.getProducts());
 				ProductListFragment fragment = (ProductListFragment)arg0.getTag();
 				mWebService.requestCommitOrder(fragment, order);
 			}
@@ -143,27 +138,18 @@ public class ProductListFragment extends ListFragment implements RequestListener
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.id_btn_return:
-			getSwitcher().switchFragment(FragmentIdentity.FRAGMENT_SHOP_LIST, null);
+			getSwitcher().switchFragment(FragmentIdentity.FRAGMENT_SHOP_LIST, null, null);
 			break;
 			
 		case R.id.id_btn_about:
-			getSwitcher().switchFragment(FragmentIdentity.FRAGMENT_ABOUT, mShopManager.getActiveShop().getIntroductionUrl());
+			getSwitcher().switchFragment(FragmentIdentity.FRAGMENT_ABOUT, mShop, mShop.getIntroductionUrl());
 			break;
 		}
 	}
 
 	@Override
 	public void onRequestComplete(Request request) {
-		if (request instanceof ProductListRequest) {
-			ProductListRequest productListRequest = (ProductListRequest) request;
-			
-			if (productListRequest.getResult().getCode() == Request.RESULT_SUCCESS) {
-				ProductListAdapter adapter = (ProductListAdapter) getAdapter();
-				
-				adapter.getShop().setProducts(productListRequest.getProductList());
-				adapter.refresh();
-			}
-		} else if (request instanceof CommitOrderRequest) {
+		if (request instanceof CommitOrderRequest) {
 			if (request.getResult().getCode() == Request.RESULT_SUCCESS)
 				Toast.makeText(getActivity(),
 					getActivity().getString(R.string.str_hints_order_success), Toast.LENGTH_SHORT).show();
@@ -176,5 +162,9 @@ public class ProductListFragment extends ListFragment implements RequestListener
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		super.onItemClick(parent, view, position, id);
+	}
+	
+	public void setShop(Shop shop) {
+		mShop = shop;
 	}
 }

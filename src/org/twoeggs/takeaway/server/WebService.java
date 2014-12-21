@@ -1,6 +1,7 @@
 package org.twoeggs.takeaway.server;
 
 import org.twoeggs.takeaway.classes.Order;
+import org.twoeggs.takeaway.classes.Shop;
 
 public class WebService {
 	public static final String TAG = "WebService";
@@ -24,8 +25,8 @@ public class WebService {
 		request.post();
 	}
 	
-	public void requestProductList(RequestListener listener, int code) {
-		Request request = new ProductListRequest(listener, code);
+	public void requestProductList(RequestListener listener, Shop shop) {
+		Request request = new ProductListRequest(listener, shop);
 		request.post();
 	}
 	

@@ -2,12 +2,8 @@ package org.twoeggs.takeaway.classes;
 
 import java.util.ArrayList;
 
-import org.twoeggs.takeaway.utils.ImageLoader;
-
 import android.graphics.Bitmap;
-import android.os.Handler;
 import android.util.Log;
-
 
 public class Shop {
 	public static final String TAG = "Shop";

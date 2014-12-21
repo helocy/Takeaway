@@ -5,17 +5,13 @@ import org.twoeggs.takeaway.R;
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -89,7 +85,7 @@ public abstract class ListFragment extends Fragment implements View.OnClickListe
 			break;
 			
 		case R.id.id_btn_about:
-			mSwitcher.switchFragment(FragmentIdentity.FRAGMENT_ABOUT, null);
+			mSwitcher.switchFragment(FragmentIdentity.FRAGMENT_ABOUT, null, null);
 			break;
 		}
 	}

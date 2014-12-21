@@ -17,13 +17,14 @@ import android.widget.TextView;
 public class ShopListFragment extends ListFragment {
 	public static final String TAG = "ShopListFragment";
 	
-	private Button mAddBtn;
-	private TextView mNoShopText;
 	private ShopManager mShopManager;
 	
-	public ShopListFragment(ShopManager shopManager) {
+	private Button mAddBtn;
+	private TextView mNoShopText;
+	
+	public ShopListFragment(ShopManager manager) {
 		super(false);
-		mShopManager = shopManager;
+		mShopManager = manager;
 	}
 	
 	@Override
@@ -36,8 +37,6 @@ public class ShopListFragment extends ListFragment {
 	@Override
 	public void onResume() {
 		super.onResume();
-		
-		mShopManager.clearActive();
 		
 		if (getAdapter().getCount() == 0) {
 			mNoShopText.setVisibility(View.VISIBLE);
@@ -70,7 +69,7 @@ public class ShopListFragment extends ListFragment {
 			@Override
 			public void onClick(View v) {
 				// Add a new shop
-				getSwitcher().switchFragment(FragmentIdentity.FRAGMENT_ADD_SHOP, null);
+				getSwitcher().switchFragment(FragmentIdentity.FRAGMENT_ADD_SHOP, null, null);
 			}
 		});
 	}
@@ -81,8 +80,8 @@ public class ShopListFragment extends ListFragment {
 		
 		Shop shop = (Shop) getAdapter().getItem(position);
 		if (shop != null) {
-			mShopManager.setActiveShop(position);
-			getSwitcher().switchFragment(FragmentIdentity.FRAGMENT_ABOUT, shop.getIntroductionUrl());
+			mShopManager.loadShop(shop);
+			getSwitcher().switchFragment(FragmentIdentity.FRAGMENT_ABOUT, shop, shop.getIntroductionUrl());
 		}
 	}
 }

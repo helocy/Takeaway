@@ -1,10 +1,10 @@
 package org.twoeggs.takeaway.app;
 
 import org.twoeggs.takeaway.R;
+import org.twoeggs.takeaway.classes.Shop;
 import org.twoeggs.takeaway.classes.ShopManager;
 import org.twoeggs.takeaway.classes.User;
 import org.twoeggs.takeaway.database.Database;
-import org.twoeggs.takeaway.database.DatabaseHelper;
 import org.twoeggs.takeaway.server.Request;
 import org.twoeggs.takeaway.server.RequestListener;
 import org.twoeggs.takeaway.server.WebService;
@@ -13,11 +13,11 @@ import org.twoeggs.takeaway.utils.NetworkManager;
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.FragmentTransaction;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Toast;
 
 public class MainActivity extends Activity implements OnClickListener, SwitchFragment, RequestListener  {
@@ -44,7 +44,7 @@ public class MainActivity extends Activity implements OnClickListener, SwitchFra
 		
 		mWebService = new WebService();
 		mDatabase = new Database(this);
-		mShopManager = new ShopManager(mDatabase);
+		mShopManager = new ShopManager(mDatabase, mWebService);
 		
 		initView();
 		loadAppImage();                                  
@@ -116,13 +116,13 @@ public class MainActivity extends Activity implements OnClickListener, SwitchFra
 		transaction.commit();
 	}
 	
-	private void showAboutFragment(String url) {
+	private void showAboutFragment(Shop shop, String url) {
 		FragmentTransaction transaction = getFragmentManager().beginTransaction();
 		
 		if (mAboutFragment == null) {
-			mAboutFragment = new AboutFragment(url);
+			mAboutFragment = new AboutFragment(shop, url);
 		} else {
-			mAboutFragment.update(url);
+			mAboutFragment.update(shop, url);
 		}
 		transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
 		transaction.replace(R.id.id_frame_container, mAboutFragment);
@@ -132,13 +132,17 @@ public class MainActivity extends Activity implements OnClickListener, SwitchFra
 		transaction.commit();
 	}
 	
-	private void showProductListFragment() {
+	private void showProductListFragment(Shop shop) {
 		FragmentTransaction transaction = getFragmentManager().beginTransaction();
 		
 		if (mProductListFragment == null) {
-			mProductListFragment = new ProductListFragment(mShopManager, mWebService, mUser);
-			ProductListAdapter adapter = new ProductListAdapter(this);
+			mProductListFragment = new ProductListFragment(shop, mWebService, mUser);
+			ProductListAdapter adapter = new ProductListAdapter(this, shop);
 			mProductListFragment.setListAdapter(adapter);
+		} else {
+			mProductListFragment.setShop(shop);
+			ProductListAdapter adapter = (ProductListAdapter)mProductListFragment.getAdapter();
+			adapter.setShop(shop);
 		}
 		transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
 		transaction.replace(R.id.id_frame_container, mProductListFragment);
@@ -155,7 +159,9 @@ public class MainActivity extends Activity implements OnClickListener, SwitchFra
 	}
 
 	@Override
-	public void switchFragment(int id, Object arg) {
+	public void switchFragment(int id, Object arg1, Object arg2) {
+		Shop shop = null;
+
 		switch (id) {
 		case FragmentIdentity.FRAGMENT_SHOP_LIST:
 			showShopListFragment();
@@ -166,19 +172,25 @@ public class MainActivity extends Activity implements OnClickListener, SwitchFra
 			break;
 			
 		case FragmentIdentity.FRAGMENT_ABOUT:
-			String url = (String) arg;
-			showAboutFragment(url);
+			shop = (Shop) arg1;
+			String url = (String) arg2;
+			showAboutFragment(shop, url);
 			break;
 			
 		case FragmentIdentity.FRAGMENT_PRODUCT_LIST:
-			showProductListFragment();
+			shop = (Shop) arg1;
+			if (shop == null) {
+				Log.e(TAG, "Cannot show product fragment without shop");
+				break;
+			}
+
+			showProductListFragment(shop);
 			break;
 		}
 	}
 
 	@Override
 	public void onRequestComplete(Request request) {
-		// TODO Auto-generated method stub
 		
 	}
 }
