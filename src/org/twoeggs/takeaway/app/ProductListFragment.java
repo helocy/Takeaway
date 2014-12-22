@@ -8,7 +8,6 @@ import org.twoeggs.takeaway.classes.Product;
 import org.twoeggs.takeaway.classes.Shop;
 import org.twoeggs.takeaway.classes.User;
 import org.twoeggs.takeaway.server.CommitOrderRequest;
-import org.twoeggs.takeaway.server.ProductListRequest;
 import org.twoeggs.takeaway.server.Request;
 import org.twoeggs.takeaway.server.RequestListener;
 import org.twoeggs.takeaway.server.WebService;

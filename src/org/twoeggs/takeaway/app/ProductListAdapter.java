@@ -1,7 +1,5 @@
 package org.twoeggs.takeaway.app;
 
-import java.util.ArrayList;
-
 import org.twoeggs.takeaway.R;
 import org.twoeggs.takeaway.cache.ImagePool;
 import org.twoeggs.takeaway.classes.Product;
@@ -9,6 +7,8 @@ import org.twoeggs.takeaway.classes.Shop;
 
 import android.content.Context;
 import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -17,10 +17,11 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class ProductListAdapter extends BaseAdapter implements Runnable, OnClickListener {
+public class ProductListAdapter extends BaseAdapter implements OnClickListener {
 	public static final String TAG = "ProductListAdapter";
 	
 	private Context mContext;
+	private Handler mHandler;
 	private ImagePool mImagePool;
 	private SwitchFragment mSwitcher;
 	
@@ -32,6 +33,22 @@ public class ProductListAdapter extends BaseAdapter implements Runnable, OnClick
 		mContext = context;
 		mShop = shop;
 		mImagePool = imagePool;
+		
+		mHandler = new Handler(Looper.getMainLooper()){
+			@Override
+			public void handleMessage(Message msg) {
+				super.handleMessage(msg);
+				
+				switch (msg.what) {
+				case HandlerMessage.MSG_UPDATE_IMAGE:
+					updateProductImage((ViewHolder)msg.obj);
+					break;
+					
+				default:
+					break;
+				}
+			}
+		};
 	}
 
 	@Override
@@ -69,9 +86,12 @@ public class ProductListAdapter extends BaseAdapter implements Runnable, OnClick
 		
 		if (mImagePool.getImage(product.getLogoUrl()) != null) {
 			viewHolder.mProductImage.setImageBitmap(mImagePool.getImage(product.getLogoUrl()));
+			notifyDataSetChanged();
 		} else {
-			Handler handler = new Handler();
-			handler.postDelayed(this, 1000);
+			Message msg = new Message();
+			msg.what = HandlerMessage.MSG_UPDATE_IMAGE;
+			msg.obj = viewHolder;
+			mHandler.sendMessageDelayed(msg, 1000);
 		}
 	}
 
@@ -125,15 +145,6 @@ public class ProductListAdapter extends BaseAdapter implements Runnable, OnClick
 	
 	public void setSwitcher(SwitchFragment switcher) {
 		mSwitcher = switcher;
-	}
-	
-	public void refresh() {
-		notifyDataSetChanged();
-	}
-
-	@Override
-	public void run() {
-		//updateProductImage();
 	}
 
 	@Override

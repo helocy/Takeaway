@@ -7,23 +7,42 @@ import org.twoeggs.takeaway.classes.ShopManager;
 
 import android.content.Context;
 import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
-public class ShopListAdapter extends BaseAdapter implements Runnable {
+public class ShopListAdapter extends BaseAdapter {
 	public static final String TAG = "ShopListAdapter";
 	
 	private Context mContext;
 	private ShopManager mShopManager;
 	private ImagePool mImagePool;
+	private Handler mHandler;
 	
 	public ShopListAdapter(Context context, ShopManager manager, ImagePool imagePool) {
 		mContext = context;
 		mShopManager = manager;
 		mImagePool = imagePool;
+		
+		mHandler = new Handler(Looper.getMainLooper()){
+			@Override
+			public void handleMessage(Message msg) {
+				super.handleMessage(msg);
+				
+				switch (msg.what) {
+				case HandlerMessage.MSG_UPDATE_IMAGE:
+					updateShopImage((ViewHolder)msg.obj);
+					break;
+					
+				default:
+					break;
+				}
+			}
+		};
 	}
 
 	@Override
@@ -51,9 +70,12 @@ public class ShopListAdapter extends BaseAdapter implements Runnable {
 		
 		if (mImagePool.getImage(shop.getLogoUrl()) != null) {
 			viewHolder.mShopLogoView.setImageBitmap(mImagePool.getImage(shop.getLogoUrl()));
+			notifyDataSetChanged();
 		} else {
-			Handler handler = new Handler();
-			handler.postDelayed(this, 1000);
+			Message msg = new Message();
+			msg.what = HandlerMessage.MSG_UPDATE_IMAGE;
+			msg.obj = viewHolder;
+			mHandler.sendMessageDelayed(msg, 1000);
 		}
 	}
 
@@ -83,9 +105,4 @@ public class ShopListAdapter extends BaseAdapter implements Runnable {
 		ImageView mShopLogoView;
 		int mPosition;
     }
-
-	@Override
-	public void run() {
-		//updateShopImage();
-	}
 }
