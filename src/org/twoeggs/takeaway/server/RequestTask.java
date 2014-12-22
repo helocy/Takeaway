@@ -19,7 +19,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import android.os.AsyncTask;
 import android.util.Log;
 
-public class RequestTask extends AsyncTask<String, Integer, String>{
+public class RequestTask extends AsyncTask<String, Integer, String> {
 	public static final String TAG = "WebServiceTask";
 	
 	private List<NameValuePair> mParams;

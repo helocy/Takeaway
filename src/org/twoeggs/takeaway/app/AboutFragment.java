@@ -1,16 +1,14 @@
 package org.twoeggs.takeaway.app;
 
 import org.twoeggs.takeaway.R;
+import org.twoeggs.takeaway.cache.ImagePool;
 import org.twoeggs.takeaway.classes.Shop;
-import org.twoeggs.takeaway.utils.ImageLoader;
 
 import android.app.Activity;
 import android.app.Fragment;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,27 +21,14 @@ public class AboutFragment extends Fragment implements Runnable {
 	
 	private Shop mShop;
 	private String mImageUrl;
-	private Bitmap mImage;
+	private ImagePool mImagePool;
 	private SwitchFragment mSwitcher;
-	private Handler mHandler;
 	
-	public AboutFragment(Shop shop, String imageUrl) {
+	public AboutFragment(Shop shop, String imageUrl, ImagePool imagePool) {
 		super();
+		mImagePool = imagePool;
 		mShop = shop;
 		mImageUrl = imageUrl;
-		
-		mHandler = new Handler(Looper.getMainLooper()) {
-			@Override
-			public void handleMessage(Message msg) {
-				super.handleMessage(msg);
-				
-				switch (msg.what) {
-				case HandlerMessage.MSG_ABOUT_LOADED:
-					mAboutImage.setImageBitmap(mImage);
-					break;
-				}
-			}
-		};
 	}
 	
 	@Override
@@ -66,22 +51,25 @@ public class AboutFragment extends Fragment implements Runnable {
 		mSwitcher = (SwitchFragment)activity;
 	}
 	
+	private void updateUrlImage() {
+		Bitmap image = mImagePool.getImage(mImageUrl);
+		if (image == null) {
+			mAboutImage.setImageResource(R.drawable.about_app);
+			
+			Handler handler = new Handler();
+			handler.postDelayed(this, 1000);
+		} else {
+			mAboutImage.setImageBitmap(image);
+		}
+	}
+	
 	private void initView() {
 		mAboutImage = (ImageView) getView().findViewById(R.id.id_image_about);
 		
-		if (mImageUrl == null) {
+		if (mImageUrl == null)
 			mAboutImage.setImageResource(R.drawable.about_app);
-		} else {
-			if (mImage == null) {
-				mAboutImage.setImageResource(R.drawable.about_app);
-				
-				Thread thread = new Thread(this);
-				thread.setName(TAG);
-				thread.start();
-			} else {
-				mAboutImage.setImageBitmap(mImage);
-			}
-		}
+		else
+			updateUrlImage();
 		
 		mAboutImage.setOnClickListener(new View.OnClickListener() {
 			
@@ -102,18 +90,10 @@ public class AboutFragment extends Fragment implements Runnable {
 
 		mShop = shop;
 		mImageUrl = imageUrl;
-		mImage = null;
 	}
 
 	@Override
 	public void run() {
-		if (mImageUrl == null)
-			return;
-		
-		mImage = ImageLoader.load(mImageUrl);
-		
-		Message msg = new Message();
-		msg.what = HandlerMessage.MSG_ABOUT_LOADED;
-		mHandler.sendMessage(msg);
+		updateUrlImage();
 	}
 }

@@ -1,6 +1,7 @@
 package org.twoeggs.takeaway.app;
 
 import org.twoeggs.takeaway.R;
+import org.twoeggs.takeaway.cache.ImagePool;
 import org.twoeggs.takeaway.classes.Shop;
 import org.twoeggs.takeaway.classes.ShopManager;
 import org.twoeggs.takeaway.classes.User;
@@ -31,6 +32,7 @@ public class MainActivity extends Activity implements OnClickListener, SwitchFra
 	private WebService mWebService;
 	private ShopManager mShopManager;
 	private Database mDatabase;
+	private ImagePool mImagePool;
 	
 	private User mUser;
 
@@ -42,6 +44,7 @@ public class MainActivity extends Activity implements OnClickListener, SwitchFra
 		
 		mUser = new User(this);
 		
+		mImagePool = new ImagePool();
 		mWebService = new WebService();
 		mDatabase = new Database(this);
 		mShopManager = new ShopManager(mDatabase, mWebService);
@@ -92,7 +95,7 @@ public class MainActivity extends Activity implements OnClickListener, SwitchFra
 		
 		if (mShopListFragment == null) {
 			mShopListFragment = new ShopListFragment(mShopManager);
-			ShopListAdapter adapter = new ShopListAdapter(this, mShopManager);
+			ShopListAdapter adapter = new ShopListAdapter(this, mShopManager, mImagePool);
 			mShopListFragment.setListAdapter(adapter);
 			transaction.add(R.id.id_frame_container, mShopListFragment);
 		}
@@ -120,7 +123,7 @@ public class MainActivity extends Activity implements OnClickListener, SwitchFra
 		FragmentTransaction transaction = getFragmentManager().beginTransaction();
 		
 		if (mAboutFragment == null) {
-			mAboutFragment = new AboutFragment(shop, url);
+			mAboutFragment = new AboutFragment(shop, url, mImagePool);
 		} else {
 			mAboutFragment.update(shop, url);
 		}
@@ -137,7 +140,7 @@ public class MainActivity extends Activity implements OnClickListener, SwitchFra
 		
 		if (mProductListFragment == null) {
 			mProductListFragment = new ProductListFragment(shop, mWebService, mUser);
-			ProductListAdapter adapter = new ProductListAdapter(this, shop);
+			ProductListAdapter adapter = new ProductListAdapter(this, shop, mImagePool);
 			mProductListFragment.setListAdapter(adapter);
 		} else {
 			mProductListFragment.setShop(shop);

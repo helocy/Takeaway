@@ -3,15 +3,12 @@ package org.twoeggs.takeaway.app;
 import java.util.ArrayList;
 
 import org.twoeggs.takeaway.R;
+import org.twoeggs.takeaway.cache.ImagePool;
 import org.twoeggs.takeaway.classes.Product;
 import org.twoeggs.takeaway.classes.Shop;
-import org.twoeggs.takeaway.utils.ImageLoader;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -24,37 +21,17 @@ public class ProductListAdapter extends BaseAdapter implements Runnable, OnClick
 	public static final String TAG = "ProductListAdapter";
 	
 	private Context mContext;
-	private Handler mHandler;
+	private ImagePool mImagePool;
 	private SwitchFragment mSwitcher;
 	
 	private Shop mShop;
-	private boolean mBreaker = false;
 	
-	public ProductListAdapter(Context context, Shop shop) {
+	public ProductListAdapter(Context context, Shop shop, ImagePool imagePool) {
 		super();
 		
 		mContext = context;
 		mShop = shop;
-		
-		mHandler = new Handler(Looper.getMainLooper()){
-			@Override
-			public void handleMessage(Message msg) {
-				super.handleMessage(msg);
-				
-				switch (msg.what) {
-				case HandlerMessage.MSG_IMAGE_LOADED:
-					notifyDataSetChanged();
-					break;
-					
-				default:
-					break;
-				}
-			}
-		};
-		
-		Thread imageLoader = new Thread(this);
-		imageLoader.setName(TAG);
-		imageLoader.start();
+		mImagePool = imagePool;
 	}
 
 	@Override
@@ -82,6 +59,21 @@ public class ProductListAdapter extends BaseAdapter implements Runnable, OnClick
 		// TODO Auto-generated method stub
 		return 0;
 	}
+	
+	private void updateProductImage(ViewHolder viewHolder) {
+		Product product = mShop.getProductByIndex(viewHolder.mPosition);
+		if (product == null) {
+			Log.e(TAG, "Try to show null product");
+			return;
+		}	
+		
+		if (mImagePool.getImage(product.getLogoUrl()) != null) {
+			viewHolder.mProductImage.setImageBitmap(mImagePool.getImage(product.getLogoUrl()));
+		} else {
+			Handler handler = new Handler();
+			handler.postDelayed(this, 1000);
+		}
+	}
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
@@ -105,14 +97,7 @@ public class ProductListAdapter extends BaseAdapter implements Runnable, OnClick
 			viewHolder = (ViewHolder) convertView.getTag();
 		}
 		
-		Product product = mShop.getProductByIndex(position);
-		if (product == null) {
-			Log.e(TAG, "Try to show null product");
-			return null;
-		}
-		
-		if (product.getLogo() != null)
-			viewHolder.mProductImage.setImageBitmap(product.getLogo());
+		updateProductImage(viewHolder);
 		
 		viewHolder.mAddBtn.setOnClickListener(this);
 		viewHolder.mCancelBtn.setOnClickListener(this);
@@ -148,39 +133,7 @@ public class ProductListAdapter extends BaseAdapter implements Runnable, OnClick
 
 	@Override
 	public void run() {
-		while (true) {
-			if (mBreaker)
-				break;
-			
-			ArrayList<Product> products = mShop.getProducts();
-			if (products == null)
-				continue;
-			
-			int count = products.size();
-			boolean changed = false;
-			
-			for (int i = 0; i < count; i++) {
-				Product product = products.get(i);
-				if (product.getLogo() == null) {
-					Bitmap logo = ImageLoader.load(product.getLogoUrl());
-					product.setLogo(logo);
-					changed = true;
-				}
-				
-				if (changed) {
-					Message msg = new Message();
-					msg.what = HandlerMessage.MSG_IMAGE_LOADED;
-					mHandler.sendMessage(msg);
-				}
-			}
-			
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+		//updateProductImage();
 	}
 
 	@Override

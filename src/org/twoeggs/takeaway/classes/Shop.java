@@ -2,15 +2,11 @@ package org.twoeggs.takeaway.classes;
 
 import java.util.ArrayList;
 
-import android.graphics.Bitmap;
 import android.util.Log;
 
 public class Shop {
 	public static final String TAG = "Shop";
 	public static final int INVALID_SHOP_CODE = -1;
-	
-	private Bitmap mLogo = null;
-	private Bitmap mIntroductionImage = null;
 	
 	private int mCode = INVALID_SHOP_CODE;
 	private String mUserId;
@@ -60,22 +56,6 @@ public class Shop {
 	public boolean setIntroductionUrl(String url) {
 		mIntroductionUrl = url;
 		return true;
-	}
-	
-	public Bitmap getLogo() {
-		return mLogo;
-	}
-	
-	public void setLogo(Bitmap bm) {
-		mLogo = bm;
-	}
-	
-	public Bitmap getIntroductionImage() {
-		return mIntroductionImage;
-	}
-	
-	public void setIntroductionImage(Bitmap bm) {
-		mIntroductionImage = bm;
 	}
 	
 	public ArrayList<Product> getProducts() {

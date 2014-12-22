@@ -14,9 +14,6 @@ public class Product {
 	private boolean mDelFlag;
 	private int mOrderNum;
 	
-	private Bitmap mLogoImage;
-	private Bitmap mIntroductionImage;
-	
 	public int getId() {
 		return mId;
 	}
@@ -55,14 +52,6 @@ public class Product {
 	
 	public void setIntroductionUrl(String url) {
 		mIntroductionUrl = url;
-	}
-	
-	public Bitmap getLogo() {
-		return mLogoImage;
-	}
-	
-	public void setLogo(Bitmap image) {
-		mLogoImage = image;
 	}
 	
 	public void setOrderNum(int num) {
