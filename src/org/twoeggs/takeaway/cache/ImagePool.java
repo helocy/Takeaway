@@ -9,16 +9,24 @@ public class ImagePool implements ImageLoaderListener {
 	public static final int CAPACITY = 36;
 	
 	private HashMap<String, ImageCache> mPool;
+	private HashMap<String, String> mCachingList;
 	private long mCurrentTime;
 	
 	public ImagePool() {
 		mPool = new HashMap<String, ImageCache>();
+		mCachingList = new HashMap<String, String>();
 		mCurrentTime = 0;
 	}
 	
 	private void loadImage(String url) {
-		ImageLoader loader = new ImageLoader(this, url);
-		loader.execute();
+		// Check if an image is caching to prevent cache
+		// the image twice
+		String obj = mCachingList.get(url);
+		if (obj == null) {
+			mCachingList.put(url, url);
+			ImageLoader loader = new ImageLoader(this, url);
+			loader.execute();
+		}
 	}
 	
 	public Bitmap getImage(String url) {
@@ -36,5 +44,6 @@ public class ImagePool implements ImageLoaderListener {
 		mCurrentTime++;
 		ImageCache imageCache = new ImageCache(image, mCurrentTime);
 		mPool.put(url, imageCache);
+		mCachingList.remove(url);
 	}
 }

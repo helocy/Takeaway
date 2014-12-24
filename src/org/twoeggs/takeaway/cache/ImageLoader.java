@@ -23,8 +23,8 @@ public class ImageLoader extends AsyncTask<String, Integer, Bitmap> {
 	private static InputStream getImageStream(String path) throws Exception{  
         URL url = new URL(path);  
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();  
-        conn.setConnectTimeout(5 * 1000);  
-        conn.setRequestMethod("GET");  
+        conn.setConnectTimeout(5 * 1000);
+        conn.setRequestMethod("GET");
         if(conn.getResponseCode() == HttpURLConnection.HTTP_OK){  
             return conn.getInputStream();  
         }  
