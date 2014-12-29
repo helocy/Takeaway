@@ -115,6 +115,10 @@ public class ProductListAdapter extends BaseAdapter implements OnClickListener {
 			viewHolder.mProductImage.setTag(viewHolder);
 		} else {
 			viewHolder = (ViewHolder) convertView.getTag();
+			if (viewHolder.mPosition != position) {
+				viewHolder.mPosition = position;
+				viewHolder.mProductImage.setImageBitmap(null);
+			}
 		}
 		
 		updateProductImage(viewHolder);
