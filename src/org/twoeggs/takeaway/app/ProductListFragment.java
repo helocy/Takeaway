@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -81,17 +82,17 @@ public class ProductListFragment extends ListFragment implements RequestListener
 		LayoutParams layoutParams = null;
 		
 		LayoutInflater inflater = LayoutInflater.from(getActivity());
-		LinearLayout container = (LinearLayout) getView().findViewById(R.id.id_view_bottom_container);
-		container.addView(inflater.inflate(R.layout.bottom_add_order, null));
+		addFooterView(inflater.inflate(R.layout.bottom_add_order, null));
 		
-		mBuyLayout = (LinearLayout) container.findViewById(R.id.id_layout_buy);
-		mBuyBtn = (Button) container.findViewById(R.id.id_btn_buy);
-		mPhoneNumEdit = (EditText) container.findViewById(R.id.id_edit_phone_num);
+		mBuyLayout = (LinearLayout) getView().findViewById(R.id.id_layout_buy);
+		mBuyBtn = (Button) getView().findViewById(R.id.id_btn_buy);
+		mPhoneNumEdit = (EditText) getView().findViewById(R.id.id_edit_phone_num);
 		mBuyBtn.setTag(this);
 		
-		layoutParams = mBuyLayout.getLayoutParams();
-		layoutParams.height = getResources().getDisplayMetrics().heightPixels / 10;
-		mBuyLayout.setLayoutParams(layoutParams);
+		AbsListView.LayoutParams lp = new AbsListView.LayoutParams(
+					new LayoutParams(LayoutParams.MATCH_PARENT,
+					getResources().getDisplayMetrics().heightPixels / 10));
+		mBuyLayout.setLayoutParams(lp);
 		
 		layoutParams = mPhoneNumEdit.getLayoutParams();
 		layoutParams.width = getResources().getDisplayMetrics().widthPixels / 2;

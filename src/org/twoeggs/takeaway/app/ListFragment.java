@@ -106,6 +106,10 @@ public abstract class ListFragment extends Fragment implements View.OnClickListe
 		mAdapter.notifyDataSetChanged();
 	}
 	
+	public void addFooterView(View v) {
+		mListView.addFooterView(v);
+	}
+	
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		return;

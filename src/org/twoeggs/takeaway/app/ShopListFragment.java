@@ -55,8 +55,7 @@ public class ShopListFragment extends ListFragment {
 	
 	private void initView() {
 		LayoutInflater inflater = LayoutInflater.from(getActivity());
-		LinearLayout container = (LinearLayout) getView().findViewById(R.id.id_view_bottom_container);
-		container.addView(inflater.inflate(R.layout.bottom_add_shop, null));
+		addFooterView(inflater.inflate(R.layout.bottom_add_shop, null));
 		mAddBtn = (Button) getView().findViewById(R.id.id_btn_add_shop);
 		mNoShopText = (TextView) getView().findViewById(R.id.id_text_no_shop);
 		
